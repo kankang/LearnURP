@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 
 public partial class CameraRender
@@ -26,6 +27,8 @@ public partial class CameraRender
         new ShaderTagId("VertexLMRGBM"),
         new ShaderTagId("VertexLM")
     };
+
+    string SampleName { get; set; }
 
     partial void DrawUnsupportedShaders()
     {
@@ -69,8 +72,11 @@ public partial class CameraRender
 
     partial void PrepareBuffer()
     {
-        buffer.name = camera.name;  // Frame Debugger中，具有相同名称的相邻Sample作用域会被合并，所以我们最终看到一个Render Camera作用域，这样使用摄像机名称指定作用域名称
+        Profiler.BeginSample("Editor Only");
+        buffer.name = SampleName = camera.name;  // Frame Debugger中，具有相同名称的相邻Sample作用域会被合并，所以我们最终看到一个Render Camera作用域，这样使用摄像机名称指定作用域名称
+        Profiler.EndSample();
     }
-
+#else
+    const string SampleName = bufferName;
 #endif
 }

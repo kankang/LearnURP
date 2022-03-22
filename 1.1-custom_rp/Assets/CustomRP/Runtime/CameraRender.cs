@@ -8,8 +8,8 @@ public partial class CameraRender
     ScriptableRenderContext context;
     Camera camera;
 
-    const string buffName = "Render Camera";
-    CommandBuffer buffer = new CommandBuffer { name = buffName };
+    const string bufferName = "Render Camera";
+    CommandBuffer buffer = new CommandBuffer { name = bufferName };
 
     CullingResults cullingResults;
 
@@ -68,14 +68,14 @@ public partial class CameraRender
     void Setup()
     {
         context.SetupCameraProperties(camera);
-        buffer.BeginSample(buffName);
+        buffer.BeginSample(SampleName);
         buffer.ClearRenderTarget(true, true, Color.clear);
         ExecuteBuffer();
     }
 
     void Submit()
     {
-        buffer.EndSample(buffName);
+        buffer.EndSample(SampleName);
         ExecuteBuffer();
         context.Submit();
     }
