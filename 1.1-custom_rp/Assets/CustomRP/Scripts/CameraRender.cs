@@ -8,6 +8,9 @@ public partial class CameraRender
     ScriptableRenderContext context;
     Camera camera;
 
+    const string buffName = "Render Camera";
+    CommandBuffer buffer = new CommandBuffer { name = buffName };
+
     public void Render(ScriptableRenderContext context, Camera camera)
     {
         this.context = context;
@@ -27,12 +30,22 @@ public partial class CameraRender
 
     void Setup()
     {
+        buffer.BeginSample(buffName);
+        ExecuteBuffer();
+
         context.SetupCameraProperties(camera);  // 设置视图投影矩阵unity_MatrixVP
     }
 
     void Submit()
     {
+        buffer.EndSample(buffName);
+        ExecuteBuffer();
         context.Submit();
     }
 
+    void ExecuteBuffer()
+    {
+        context.ExecuteCommandBuffer(buffer);
+        buffer.Clear();
+    }
 }
