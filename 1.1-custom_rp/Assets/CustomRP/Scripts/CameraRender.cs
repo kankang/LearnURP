@@ -25,6 +25,8 @@ public partial class CameraRender
         new ShaderTagId("VertexLM")
     };
 
+    static Material errorMaterial = null;
+
     public void Render(ScriptableRenderContext context, Camera camera)
     {
         this.context = context;
@@ -101,7 +103,14 @@ public partial class CameraRender
 
     void DrawUnsupportedShaders()
     {
-        DrawingSettings drawingSettings = new DrawingSettings(legacyShaderTagIds[0], new SortingSettings(camera));
+        if (null == errorMaterial)
+        {
+            errorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        }
+        DrawingSettings drawingSettings = new DrawingSettings(legacyShaderTagIds[0], new SortingSettings(camera))
+        {
+            overrideMaterial = errorMaterial
+        };
 
         for (int i = 1; i < legacyShaderTagIds.Length; ++i)
         {
