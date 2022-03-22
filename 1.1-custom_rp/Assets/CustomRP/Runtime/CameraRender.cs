@@ -68,8 +68,16 @@ public partial class CameraRender
     void Setup()
     {
         context.SetupCameraProperties(camera);
+        
         buffer.BeginSample(SampleName);
-        buffer.ClearRenderTarget(true, true, Color.clear);
+
+        CameraClearFlags flags = camera.clearFlags;
+        buffer.ClearRenderTarget(
+            flags <= CameraClearFlags.Depth,        // 只有Detph才不会清除深度缓冲区
+            flags == CameraClearFlags.Color,        // 当标志设置为Color时，需要清除颜色缓冲区
+            flags == CameraClearFlags.Color ? camera.backgroundColor : Color.clear);
+            // flags == CameraClearFlags.Color ? camera.backgroundColor.linear : Color.clear);
+
         ExecuteBuffer();
     }
 
