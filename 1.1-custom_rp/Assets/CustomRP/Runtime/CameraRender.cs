@@ -21,6 +21,8 @@ public partial class CameraRender
         this.context = context;
         this.camera = camera;
 
+        PrepareForSceneWindow();    // 可能会给场景添加几何体，所以必须在裁剪之前完成。
+
         if (!Cull())
             return;
 

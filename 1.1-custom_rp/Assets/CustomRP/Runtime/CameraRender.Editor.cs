@@ -10,6 +10,8 @@ public partial class CameraRender
 
     partial void DrawUnsupportedShaders();
 
+    partial void PrepareForSceneWindow();
+
 #if UNITY_EDITOR
     static Material errorMaterial = null;
 
@@ -52,6 +54,14 @@ public partial class CameraRender
         {
             context.DrawGizmos(camera, GizmoSubset.PreImageEffects);
             context.DrawGizmos(camera, GizmoSubset.PostImageEffects);
+        }
+    }
+
+    partial void PrepareForSceneWindow()
+    {
+        if (camera.cameraType == CameraType.SceneView)
+        {
+            ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
         }
     }
 #endif
