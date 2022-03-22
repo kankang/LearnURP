@@ -30,10 +30,11 @@ public partial class CameraRender
 
     void Setup()
     {
+        context.SetupCameraProperties(camera);  // 设置视图投影矩阵unity_MatrixVP
+
+        buffer.ClearRenderTarget(true, true, Color.clear);
         buffer.BeginSample(buffName);
         ExecuteBuffer();
-
-        context.SetupCameraProperties(camera);  // 设置视图投影矩阵unity_MatrixVP
     }
 
     void Submit()
