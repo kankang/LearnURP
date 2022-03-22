@@ -15,10 +15,13 @@ public partial class CameraRender
 
     static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
 
+
     public void Render(ScriptableRenderContext context, Camera camera)
     {
         this.context = context;
         this.camera = camera;
+
+        PrepareForSceneWindow();    // 可能会给场景添加几何体，所以必须在裁剪之前完成。
 
         if (!Cull())
             return;
@@ -26,15 +29,20 @@ public partial class CameraRender
         Setup();
 
         DrawVisiableGeometry();
+        DrawUnsupportedShaders();
+        DrawGizmos();
 
         Submit();
     }
 
     void DrawVisiableGeometry()
     {
+        //DrawingSettings drawingSettings = new DrawingSettings();
+        //FilteringSettings filteringSettings = new FilteringSettings();
+
         SortingSettings sortingSettings = new SortingSettings(camera)
         {
-            criteria = SortingCriteria.CommonOpaque
+            criteria = SortingCriteria.CommonOpaque,
         };
         DrawingSettings drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings);
 
@@ -53,14 +61,14 @@ public partial class CameraRender
         filteringSettings = new FilteringSettings(RenderQueueRange.transparent);
 
         context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
+
     }
 
     void Setup()
     {
-        context.SetupCameraProperties(camera);  // 设置视图投影矩阵unity_MatrixVP
-
-        buffer.ClearRenderTarget(true, true, Color.clear);
+        context.SetupCameraProperties(camera);
         buffer.BeginSample(buffName);
+        buffer.ClearRenderTarget(true, true, Color.clear);
         ExecuteBuffer();
     }
 
