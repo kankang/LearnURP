@@ -12,6 +12,8 @@ public partial class CameraRender
 
     partial void PrepareForSceneWindow();
 
+    partial void PrepareBuffer();
+
 #if UNITY_EDITOR
     static Material errorMaterial = null;
 
@@ -64,5 +66,11 @@ public partial class CameraRender
             ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
         }
     }
+
+    partial void PrepareBuffer()
+    {
+        buffer.name = camera.name;  // Frame Debugger中，具有相同名称的相邻Sample作用域会被合并，所以我们最终看到一个Render Camera作用域，这样使用摄像机名称指定作用域名称
+    }
+
 #endif
 }
