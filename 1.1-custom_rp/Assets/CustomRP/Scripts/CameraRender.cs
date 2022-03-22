@@ -12,6 +12,27 @@ public partial class CameraRender
     {
         this.context = context;
         this.camera = camera;
+
+        Setup();
+
+        DrawVisiableGeometry();
+
+        Submit();
+    }
+
+    void DrawVisiableGeometry()
+    {
+        context.DrawSkybox(camera);
+    }
+
+    void Setup()
+    {
+        context.SetupCameraProperties(camera);  // 设置视图投影矩阵unity_MatrixVP
+    }
+
+    void Submit()
+    {
+        context.Submit();
     }
 
 }
