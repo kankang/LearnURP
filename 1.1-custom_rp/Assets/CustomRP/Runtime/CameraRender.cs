@@ -15,17 +15,6 @@ public partial class CameraRender
 
     static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
 
-    static ShaderTagId[] legacyShaderTagIds =
-    {
-        new ShaderTagId("Always"),
-        new ShaderTagId("ForwardBase"),
-        new ShaderTagId("PrepassBase"),
-        new ShaderTagId("Vertex"),
-        new ShaderTagId("VertexLMRGBM"),
-        new ShaderTagId("VertexLM")
-    };
-
-    static Material errorMaterial = null;
 
     public void Render(ScriptableRenderContext context, Camera camera)
     {
@@ -45,9 +34,12 @@ public partial class CameraRender
 
     void DrawVisiableGeometry()
     {
+        //DrawingSettings drawingSettings = new DrawingSettings();
+        //FilteringSettings filteringSettings = new FilteringSettings();
+
         SortingSettings sortingSettings = new SortingSettings(camera)
         {
-            criteria = SortingCriteria.CommonOpaque
+            criteria = SortingCriteria.CommonOpaque,
         };
         DrawingSettings drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings);
 
@@ -66,14 +58,14 @@ public partial class CameraRender
         filteringSettings = new FilteringSettings(RenderQueueRange.transparent);
 
         context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
+
     }
 
     void Setup()
     {
-        context.SetupCameraProperties(camera);  // 设置视图投影矩阵unity_MatrixVP
-
-        buffer.ClearRenderTarget(true, true, Color.clear);
+        context.SetupCameraProperties(camera);
         buffer.BeginSample(buffName);
+        buffer.ClearRenderTarget(true, true, Color.clear);
         ExecuteBuffer();
     }
 
@@ -99,26 +91,5 @@ public partial class CameraRender
         }
 
         return false;
-    }
-
-    void DrawUnsupportedShaders()
-    {
-        if (null == errorMaterial)
-        {
-            errorMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
-        }
-        DrawingSettings drawingSettings = new DrawingSettings(legacyShaderTagIds[0], new SortingSettings(camera))
-        {
-            overrideMaterial = errorMaterial
-        };
-
-        for (int i = 1; i < legacyShaderTagIds.Length; ++i)
-        {
-            drawingSettings.SetShaderPassName(i, legacyShaderTagIds[i]);
-        }
-
-        FilteringSettings filteringSettings = FilteringSettings.defaultValue;
-
-        context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
     }
 }
