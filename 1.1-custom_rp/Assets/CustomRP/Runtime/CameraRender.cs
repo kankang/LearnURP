@@ -28,6 +28,7 @@ public partial class CameraRender
 
         DrawVisiableGeometry();
         DrawUnsupportedShaders();
+        DrawGizmos();
 
         Submit();
     }
