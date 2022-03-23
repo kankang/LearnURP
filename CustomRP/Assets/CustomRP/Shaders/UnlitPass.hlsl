@@ -1,0 +1,4 @@
+﻿#ifndef CUSTOM_UNLIT_PASS_INCLUDE
+#define CUSTOM_UNLIT_PASS_INCLUDE
+
+#endif
