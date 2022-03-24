@@ -45,7 +45,11 @@ public partial class CameraRender
         {
             criteria = SortingCriteria.CommonOpaque,
         };
-        DrawingSettings drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings);
+        DrawingSettings drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings)
+        {
+            enableDynamicBatching = true,
+            enableInstancing = true,
+        };
 
         FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
 
@@ -57,7 +61,11 @@ public partial class CameraRender
         {
             criteria = SortingCriteria.CommonTransparent,
         };
-        drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings);
+        drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings)
+        {
+            enableDynamicBatching = true,
+            enableInstancing = true,
+        };
 
         filteringSettings = new FilteringSettings(RenderQueueRange.transparent);
 
