@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4caf18c41f767ed45bbb02d314e9e8a9, type: 3}
   m_Name: Custom Render Pipleline Asset
   m_EditorClassIdentifier: 
+  useDynamicBatching: 0
+  useGPUInstancing: 1
+  useSRPBatching: 1
