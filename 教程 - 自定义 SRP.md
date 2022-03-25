@@ -33,3 +33,25 @@
 
 
 ![](https://catlikecoding.com/unity/tutorials/custom-srp/draw-calls/tutorial-image.jpg)
+
+
+
+## 三、方向光
+
+
+
+[翻译版](https://zhuanlan.zhihu.com/p/335664226)
+
+
+
+[原文地址](https://catlikecoding.com/unity/tutorials/custom-srp/directional-lights/)
+
+
+
+[资源仓库](https://bitbucket.org/catlikecodingunitytutorials/custom-srp-03-directional-lights/src)
+
+
+
+
+
+![](https://catlikecoding.com/unity/tutorials/custom-srp/directional-lights/tutorial-image.jpg)
