@@ -4,6 +4,7 @@
 #include "../ShaderLibrary/Common.hlsl"
 #include "../ShaderLibrary/Surface.hlsl"
 #include "../ShaderLibrary/Lighting.hlsl"
+#include "../ShaderLibrary/Light.hlsl"
 
 TEXTURE2D(_BaseMap);
 SAMPLER(sampler_BaseMap);
