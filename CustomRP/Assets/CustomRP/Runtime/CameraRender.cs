@@ -16,6 +16,7 @@ public partial class CameraRender
     static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit"),
     litShaderId = new ShaderTagId("CustomLit");
 
+    Lighting lighting = new Lighting();
 
     public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing)
     {
@@ -29,6 +30,8 @@ public partial class CameraRender
             return;
 
         Setup();
+
+        lighting.Setup(context, cullingResults);
 
         DrawVisiableGeometry(useDynamicBatching, useGPUInstancing);
         DrawUnsupportedShaders();
