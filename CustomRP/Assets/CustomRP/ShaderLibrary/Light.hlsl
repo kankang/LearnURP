@@ -12,8 +12,8 @@ Light GetDirectionalLight()
 {
 	Light light;
 
-	light.color = 1.0;
-	light.direction = float3(0.0, 1.0, 0.0);
+	light.color = _DirectionalLightColor;
+	light.direction = _DirectionalLightDirection;
 
 	return light;
 }

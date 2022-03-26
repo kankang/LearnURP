@@ -11,6 +11,11 @@ CBUFFER_START(UnityPerDraw)
 	real4 unity_WorldTransformParams;
 CBUFFER_END
 
+CBUFFER_START(_CustomLight)
+	float3 _DirectionalLightColor;
+	float3 _DirectionalLightDirection;
+CBUFFER_END
+
 float4x4 unity_MatrixV;
 float4x4 unity_MatrixVP;
 
