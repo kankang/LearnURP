@@ -8,12 +8,17 @@ struct Light
 	float3 direction;
 };
 
-Light GetDirectionalLight()
+int GetDirectionalLightCount()
+{
+	return _DirectionalLightCount;
+}
+
+Light GetDirectionalLight(int index)
 {
 	Light light;
 
-	light.color = _DirectionalLightColor;
-	light.direction = _DirectionalLightDirection;
+	light.color = _DirectionalLightColors[index].rgb;
+	light.direction = _DirectionalLightDirections[index].rgb;
 
 	return light;
 }
