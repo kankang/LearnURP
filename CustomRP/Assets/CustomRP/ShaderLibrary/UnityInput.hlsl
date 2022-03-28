@@ -9,6 +9,8 @@ CBUFFER_START(UnityPerDraw)
 	float4x4 glstate_matrix_projection;
 
 	real4 unity_WorldTransformParams;
+
+	float3 _WorldSpaceCameraPos;
 CBUFFER_END
 
 #define MAX_DIRECTIONAL_LIGHT_COUNT 4
