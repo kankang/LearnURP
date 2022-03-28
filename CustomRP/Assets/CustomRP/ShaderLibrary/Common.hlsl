@@ -2,6 +2,7 @@
 #define CUSTOM_COMMON_INCLUDE
 
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 #include "UnityInput.hlsl"
 
 // float3 TransformObjectToWorld(float3 positionOS)
