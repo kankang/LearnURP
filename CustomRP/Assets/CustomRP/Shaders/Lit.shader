@@ -38,4 +38,6 @@
             ENDHLSL
         }
     }
+
+    CustomEditor "CustomShaderGUI"
 }
