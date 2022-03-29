@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public partial class CameraRender
+public partial class CameraRenderer
 {
     ScriptableRenderContext context;
     Camera camera;
