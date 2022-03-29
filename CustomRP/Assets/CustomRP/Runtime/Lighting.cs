@@ -40,7 +40,6 @@ public class Lighting {
         buffer.Clear();
     }
 
-
     void SetupLights() {
         NativeArray<VisibleLight> visibleLights = cullingResults.visibleLights;
         int dirLightCount = 0;
@@ -63,5 +62,6 @@ public class Lighting {
     void SetupDirectionalLight(int index, ref VisibleLight visibleLight) {
         dirLightColors[index] = visibleLight.finalColor;
         dirLightDirections[index] = -visibleLight.localToWorldMatrix.GetColumn(2);
+        shadows.ReserveDirectionalShadows(visibleLight.light, index);
     }
 }
