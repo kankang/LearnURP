@@ -22,6 +22,7 @@ public class Lighting {
 
     CullingResults cullingResults;
 
+    Shadows shadows = new Shadows();
     public void Setup(
 		ScriptableRenderContext context, CullingResults cullingResults,
 		ShadowSettings shadowSettings
@@ -31,6 +32,7 @@ public class Lighting {
         buffer.BeginSample(bufferName);
 
         // SetupDirectionalLight();
+        shadows.Setup(context, cullingResults, shadowSettings);
         SetupLights();
 
         buffer.EndSample(bufferName);
