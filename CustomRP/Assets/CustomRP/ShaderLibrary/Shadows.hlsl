@@ -13,4 +13,9 @@ CBUFFER_START(_CustomShadows)
 		[MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT];
 CBUFFER_END
 
+
+struct DirectionalShadowData {
+    float strength;
+    int tileIndex;
+};
 #endif

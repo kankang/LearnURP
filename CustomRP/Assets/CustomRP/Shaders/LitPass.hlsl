@@ -36,6 +36,25 @@ struct Varyings
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
+float SampleDirectionalShadowAtlas(float3 positionSTS)
+{
+	return SAMPLE_TEXTURE2D_SHADOW(_DirectionalShadowAtlas, SHADOW_SAMPLER, positionSTS);
+}
+
+float GetDirectionalShadowAttenuation(DirectionalShadowData data, Surface surfaceWS)
+{
+	if (data.strength <= 0.0)
+		return 1.0;
+
+	float3 positionSTS = mul(_DirectionalShadowMatrices[data.tileIndex],
+		float4(surfaceWS.position, 1.0)
+		).xyz;
+
+	float shadow = SampleDirectionalShadowAtlas(positionSTS);
+
+	return lerp(1.0, shadow, data.strength);
+}
+
 Varyings LitPassVertex(Attributes input)// : SV_POSITION
 {
 	Varyings output;
@@ -61,6 +80,7 @@ float4 LitPassFragment(Varyings input) : SV_TARGET
 	#endif
 
 	Surface surface;
+	surface.position = input.positionWS;
 	surface.normal = normalize(input.normalWS);
 	surface.viewDirection = normalize(_WorldSpaceCameraPos - input.positionWS);
 	surface.color = base.rgb;
