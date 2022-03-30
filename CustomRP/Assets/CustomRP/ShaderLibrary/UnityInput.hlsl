@@ -19,6 +19,7 @@ CBUFFER_START(_CustomLight)
 	int _DirectionalLightCount;
 	float3 _DirectionalLightColors[MAX_DIRECTIONAL_LIGHT_COUNT];
 	float3 _DirectionalLightDirections[MAX_DIRECTIONAL_LIGHT_COUNT];
+	float4 _DirectionalLightShadowData[MAX_DIRECTIONAL_LIGHT_COUNT];
 CBUFFER_END
 
 float4x4 unity_MatrixV;
