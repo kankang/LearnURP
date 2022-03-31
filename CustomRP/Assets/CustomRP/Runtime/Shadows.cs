@@ -67,10 +67,12 @@ public class Shadows {
         if (
 			shadowedDirectionalLightCount < maxShadowedDirectionalLightCount &&
             light.shadows != LightShadows.None && light.shadowStrength > 0f &&
-            cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
-        {
+            cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b)
+		) {
             shadowedDirectionalLights[shadowedDirectionalLightCount] =
-                new ShadowedDirectionalLight { visibleLightIndex = visibleLightIndex };
+                new ShadowedDirectionalLight {
+					visibleLightIndex = visibleLightIndex
+				};
 
             return new Vector2(
                 light.shadowStrength,
