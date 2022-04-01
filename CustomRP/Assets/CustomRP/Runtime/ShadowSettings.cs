@@ -7,9 +7,10 @@ public class ShadowSettings{
 		_2048 = 2048, _4096 = 4096, _8192 = 8192
     }
 	
-    [Min(0f)]
+    [Min(0.001f)]
     public float maxDistance = 100f;
-
+    [Range(0.001f, 1f)]
+    public float distanceFade = 0.1f;
 
     [System.Serializable]
     public struct Directional {
