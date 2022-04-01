@@ -168,8 +168,10 @@ public class Shadows {
 
             buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
 
+            // buffer.SetGlobalDepthBias(0, 3f);
             ExecuteBuffer();
             context.DrawShadows(ref shadowSettings);
+            // buffer.SetGlobalDepthBias(0f, 0f);
         }
     }
 
