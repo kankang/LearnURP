@@ -11,10 +11,12 @@ public class Shadows {
         dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices"),
         cascadeCountId = Shader.PropertyToID("_CascadeCount"),
         cascadeCullingSpheresId = Shader.PropertyToID("_CascadeCullingSpheres"),
+        cascadeDataId = Shader.PropertyToID("_CascadeData"),
         shadowDistanceFadeId = Shader.PropertyToID("_ShadowDistanceFade");
 
     static Vector4[]
-        cascadeCullSpheres = new Vector4[maxCascades];
+        cascadeCullSpheres = new Vector4[maxCascades],
+        cascadeData = new Vector4[maxCascades];
 
     static Matrix4x4[]
         dirShadowMatrices = new Matrix4x4[maxShadowedDirectionalLightCount * maxCascades];
@@ -121,7 +123,7 @@ public class Shadows {
         buffer.SetGlobalVectorArray(
 			cascadeCullingSpheresId, cascadeCullSpheres
 		);
-
+        buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
         buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
         float f = 1f - settings.directional.cascadeFade;
         buffer.SetGlobalVector(
@@ -154,11 +156,8 @@ public class Shadows {
                 out ShadowSplitData splitData);
             shadowSettings.splitData = splitData;
             
-            if (index == 0)
-            {
-                Vector4 cullingSphere = splitData.cullingSphere;
-                cullingSphere.w *= cullingSphere.w;
-                cascadeCullSpheres[i] = cullingSphere;
+            if (index == 0) {
+                SetCascadeData(i, splitData.cullingSphere, tileSize);
             }
 
             int tileIndex = tileOffset + i;
@@ -174,7 +173,12 @@ public class Shadows {
             // buffer.SetGlobalDepthBias(0f, 0f);
         }
     }
-
+    void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
+    {
+        cascadeData[index].x = 1f / cullingSphere.w;
+        cullingSphere.w *= cullingSphere.w;
+        cascadeCullSpheres[index] = cullingSphere;
+    }
 
     Matrix4x4 ConvertToAtlasMatrix(Matrix4x4 m, Vector2 offset, int split) {
         if (SystemInfo.usesReversedZBuffer) {
