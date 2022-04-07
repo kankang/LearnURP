@@ -34,12 +34,17 @@ public class Lighting {
         // SetupDirectionalLight();
         shadows.Setup(context, cullingResults, shadowSettings);
         SetupLights();
+        shadows.Render();
 
         buffer.EndSample(bufferName);
         context.ExecuteCommandBuffer(buffer);
         buffer.Clear();
     }
 
+
+    public void Cleanup() {
+        shadows.Cleanup();
+    }
     void SetupLights() {
         NativeArray<VisibleLight> visibleLights = cullingResults.visibleLights;
         int dirLightCount = 0;
@@ -64,4 +69,5 @@ public class Lighting {
         dirLightDirections[index] = -visibleLight.localToWorldMatrix.GetColumn(2);
         shadows.ReserveDirectionalShadows(visibleLight.light, index);
     }
+
 }

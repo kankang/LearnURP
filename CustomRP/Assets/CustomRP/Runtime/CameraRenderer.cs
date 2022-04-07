@@ -42,6 +42,7 @@ public partial class CameraRenderer {
         DrawUnsupportedShaders();
         DrawGizmos();
 
+        lighting.Cleanup();
         Submit();
     }
 
