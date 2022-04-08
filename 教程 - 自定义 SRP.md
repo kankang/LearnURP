@@ -55,3 +55,19 @@
 
 
 ![](https://catlikecoding.com/unity/tutorials/custom-srp/directional-lights/tutorial-image.jpg)
+
+
+
+## 四、方向阴影
+
+
+
+[翻译版](https://zhuanlan.zhihu.com/p/336865391)
+
+[原文地址](https://catlikecoding.com/unity/tutorials/custom-srp/directional-shadows/)
+
+[资源仓库](https://bitbucket.org/catlikecodingunitytutorials/custom-srp-04-directional-shadows/src/master/)
+
+
+
+![](https://catlikecoding.com/unity/tutorials/custom-srp/directional-shadows/tutorial-image.jpg)
