@@ -24,6 +24,7 @@ public class Shadows {
 
     struct ShadowedDirectionalLight {
         public int visibleLightIndex;
+        public float slopeScaleBias;
     }
 
     ShadowedDirectionalLight[] shadowedDirectionalLights =
@@ -63,7 +64,7 @@ public class Shadows {
         }
     }
 
-    public Vector2 ReserveDirectionalShadows(
+    public Vector3 ReserveDirectionalShadows(
         Light light, int visibleLightIndex
     ) {
         if (
@@ -73,16 +74,18 @@ public class Shadows {
 		) {
             shadowedDirectionalLights[shadowedDirectionalLightCount] =
                 new ShadowedDirectionalLight {
-					visibleLightIndex = visibleLightIndex
-				};
+					visibleLightIndex = visibleLightIndex,
+                    slopeScaleBias = light.shadowBias
+                };
 
-            return new Vector2(
+            return new Vector3(
                 light.shadowStrength,
-                settings.directional.cascadeCount * shadowedDirectionalLightCount++
+                settings.directional.cascadeCount * shadowedDirectionalLightCount++,
+                light.shadowNormalBias
                 );
         }
 
-        return Vector2.zero;
+        return Vector3.zero;
     }
 	
 
@@ -167,10 +170,10 @@ public class Shadows {
 
             buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
 
-            // buffer.SetGlobalDepthBias(0, 3f);
+            buffer.SetGlobalDepthBias(0, light.slopeScaleBias);
             ExecuteBuffer();
             context.DrawShadows(ref shadowSettings);
-            // buffer.SetGlobalDepthBias(0f, 0f);
+            buffer.SetGlobalDepthBias(0f, 0f);
         }
     }
     void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
