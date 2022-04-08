@@ -31,8 +31,7 @@ Light GetDirectionalLight(int index, Surface surfaceWS, ShadowData shadowData) {
 	light.direction = _DirectionalLightDirections[index].xyz;
 	DirectionalShadowData dirShadowData = 
 		GetDirectionalShadowData(index, shadowData);
-	light.attenuation = shadowData.cascadeIndex * 0.25;
-
+	light.attenuation = GetDirectionalShadowAttenuation(dirShadowData, surfaceWS);
 	return light;
 }
 

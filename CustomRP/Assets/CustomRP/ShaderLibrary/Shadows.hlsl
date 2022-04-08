@@ -23,11 +23,13 @@ struct DirectionalShadowData {
 struct ShadowData
 {
     int cascadeIndex;
+	float strength;
 };
 
 ShadowData GetShadowData(Surface surfaceWS)
 {
     ShadowData data;
+	data.strength = 1.0;
 
     int i;
     for (i = 0; i < _CascadeCount; ++i)
@@ -37,6 +39,10 @@ ShadowData GetShadowData(Surface surfaceWS)
         if (distanceSqr < sphere.w)
             break;
     }
+    
+	if (i == _CascadeCount) {
+		data.strength = 0.0;
+	}
 
     data.cascadeIndex = i;
 
@@ -56,7 +62,8 @@ float GetDirectionalShadowAttenuation(
     if (data.strength <= 0.0)
         return 1.0;
 
-    float3 positionSTS = mul(_DirectionalShadowMatrices[data.tileIndex],
+    float3 positionSTS = mul(
+    	_DirectionalShadowMatrices[data.tileIndex],
         float4(surfaceWS.position, 1.0)
         ).xyz;
 
