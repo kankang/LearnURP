@@ -96,7 +96,8 @@ public class Shadows {
         int atlasSize = (int)settings.directional.atlasSize;
         buffer.GetTemporaryRT(
 			dirShadowAtlasId, atlasSize, atlasSize,
-            32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
+            32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap
+		);
 
         buffer.SetRenderTarget(
             dirShadowAtlasId,
@@ -117,12 +118,18 @@ public class Shadows {
         }
 
         buffer.SetGlobalInt(cascadeCountId, settings.directional.cascadeCount);
-        buffer.SetGlobalVectorArray(cascadeCullingSpheresId, cascadeCullSpheres);
+        buffer.SetGlobalVectorArray(
+			cascadeCullingSpheresId, cascadeCullSpheres
+		);
 
         buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
-        // buffer.SetGlobalFloat(shadowDistanceId, settings.maxDistance);
-        buffer.SetGlobalVector(shadowDistanceFadeId,
-            new Vector4(1f / settings.maxDistance, 1f / settings.distanceFade));
+        float f = 1f - settings.directional.cascadeFade;
+        buffer.SetGlobalVector(
+            shadowDistanceFadeId, new Vector4(
+                1f / settings.maxDistance, 1f / settings.distanceFade,
+                1f / (1f - f * f)
+             )
+		);
 
         buffer.EndSample(bufferName);
         ExecuteBuffer();
