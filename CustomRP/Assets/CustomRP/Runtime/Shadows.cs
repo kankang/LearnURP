@@ -175,9 +175,13 @@ public class Shadows {
     }
     void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
     {
-        cascadeData[index].x = 1f / cullingSphere.w;
+        float texelSize = 2f * cullingSphere.w / tileSize;
         cullingSphere.w *= cullingSphere.w;
         cascadeCullSpheres[index] = cullingSphere;
+        cascadeData[index] = new Vector4(
+            1f / cullingSphere.w,
+            texelSize * 1.4142136f
+        );
     }
 
     Matrix4x4 ConvertToAtlasMatrix(Matrix4x4 m, Vector2 offset, int split) {
