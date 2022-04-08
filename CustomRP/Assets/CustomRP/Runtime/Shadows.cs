@@ -6,12 +6,18 @@ public class Shadows {
 
     const int maxShadowedDirectionalLightCount = 4, maxCascades = 4;
 
+	static string[] directionalFilterKeywords = {
+		"_DIRECTIONAL_PCF3",
+		"_DIRECTIONAL_PCF5",
+		"_DIRECTIONAL_PCF7",
+	};
     static int
         dirShadowAtlasId = Shader.PropertyToID("_DirectionalShadowAtlas"),
         dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices"),
         cascadeCountId = Shader.PropertyToID("_CascadeCount"),
         cascadeCullingSpheresId = Shader.PropertyToID("_CascadeCullingSpheres"),
         cascadeDataId = Shader.PropertyToID("_CascadeData"),
+        shadowAtlasSizeId = Shader.PropertyToID("_ShadowAtlasSize"),
         shadowDistanceFadeId = Shader.PropertyToID("_ShadowDistanceFade");
 
     static Vector4[]
@@ -138,8 +144,29 @@ public class Shadows {
              )
 		);
 
+        SetKeywords();
+        buffer.SetGlobalVector(
+            shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize)
+        );
+
         buffer.EndSample(bufferName);
         ExecuteBuffer();
+    }
+
+    void SetKeywords()
+    {
+        int enabledIndex = (int)settings.directional.filter - 1;
+        for (int i = 0; i < directionalFilterKeywords.Length; i++)
+        {
+            if (i == enabledIndex)
+            {
+                buffer.EnableShaderKeyword(directionalFilterKeywords[i]);
+            }
+            else
+            {
+                buffer.DisableShaderKeyword(directionalFilterKeywords[i]);
+            }
+        }
     }
 
     void RenderDirectionalShadows(int index, int split, int tileSize)
@@ -182,13 +209,15 @@ public class Shadows {
     void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
     {
         float texelSize = 2f * cullingSphere.w / tileSize;
-        cullingSphere.w *= cullingSphere.w;
-        cascadeCullSpheres[index] = cullingSphere;
-        cascadeData[index] = new Vector4(
-            1f / cullingSphere.w,
-            texelSize * 1.4142136f
-        );
-    }
+		float filterSize = texelSize * ((float)settings.directional.filter + 1f);
+		cullingSphere.w -= filterSize;
+		cullingSphere.w *= cullingSphere.w;
+		cascadeCullSpheres[index] = cullingSphere;
+		cascadeData[index] = new Vector4(
+			1f / cullingSphere.w,
+			filterSize * 1.4142136f
+		);
+	}
 
     Matrix4x4 ConvertToAtlasMatrix(Matrix4x4 m, Vector2 offset, int split) {
         if (SystemInfo.usesReversedZBuffer) {
