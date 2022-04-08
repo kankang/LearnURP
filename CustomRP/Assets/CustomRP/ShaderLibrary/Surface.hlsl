@@ -4,12 +4,13 @@
 struct Surface
 {
 	float3 normal;
+	float3 position;
+	float depth;
 	float3 viewDirection;
 	float3 color;
 	float alpha;
 	float metallic;
 	float smoothness;
-	float3 position;
 };
 
 #endif
