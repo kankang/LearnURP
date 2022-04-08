@@ -11,6 +11,12 @@ public class Shadows {
 		"_DIRECTIONAL_PCF5",
 		"_DIRECTIONAL_PCF7",
 	};
+
+	static string[] cascadeBlendKeywords = {
+		"_CASCADE_BLEND_SOFT",
+		"_CASCADE_BLEND_DITHER"
+	};
+
     static int
         dirShadowAtlasId = Shader.PropertyToID("_DirectionalShadowAtlas"),
         dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices"),
@@ -104,8 +110,7 @@ public class Shadows {
     }
 
 
-    void RenderDirectionalShadows()
-    {
+    void RenderDirectionalShadows() {
         int atlasSize = (int)settings.directional.atlasSize;
         buffer.GetTemporaryRT(
 			dirShadowAtlasId, atlasSize, atlasSize,
@@ -143,34 +148,32 @@ public class Shadows {
                 1f / (1f - f * f)
              )
 		);
-
-        SetKeywords();
+		SetKeywords(
+			directionalFilterKeywords, (int)settings.directional.filter - 1
+		);
+		SetKeywords(
+			cascadeBlendKeywords, (int)settings.directional.cascadeBlend - 1
+		);
         buffer.SetGlobalVector(
             shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize)
         );
-
+		
         buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
-    void SetKeywords()
-    {
-        int enabledIndex = (int)settings.directional.filter - 1;
-        for (int i = 0; i < directionalFilterKeywords.Length; i++)
-        {
-            if (i == enabledIndex)
-            {
-                buffer.EnableShaderKeyword(directionalFilterKeywords[i]);
-            }
-            else
-            {
-                buffer.DisableShaderKeyword(directionalFilterKeywords[i]);
-            }
-        }
-    }
+	void SetKeywords (string[] keywords, int enabledIndex) {
+		for (int i = 0; i < keywords.Length; i++) {
+			if (i == enabledIndex) {
+				buffer.EnableShaderKeyword(keywords[i]);
+			}
+			else {
+				buffer.DisableShaderKeyword(keywords[i]);
+			}
+		}
+	}
 
-    void RenderDirectionalShadows(int index, int split, int tileSize)
-    {
+    void RenderDirectionalShadows(int index, int split, int tileSize) {
         ShadowedDirectionalLight light = shadowedDirectionalLights[index];
 
         ShadowDrawingSettings shadowSettings =
@@ -180,8 +183,7 @@ public class Shadows {
         int tileOffset = index * cascadeCount;
         Vector3 ratios = settings.directional.CascadeRatios;
 
-        for (int i = 0; i < cascadeCount; ++i)
-        {
+        for (int i = 0; i < cascadeCount; ++i) {
             cullingResults.ComputeDirectionalShadowMatricesAndCullingPrimitives(
                 light.visibleLightIndex, i, cascadeCount, ratios, tileSize,
                 light.nearPlaneOffset, out Matrix4x4 viewMatrix,
@@ -206,8 +208,7 @@ public class Shadows {
             buffer.SetGlobalDepthBias(0f, 0f);
         }
     }
-    void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
-    {
+    void SetCascadeData(int index, Vector4 cullingSphere, float tileSize) {
         float texelSize = 2f * cullingSphere.w / tileSize;
 		float filterSize = texelSize * ((float)settings.directional.filter + 1f);
 		cullingSphere.w -= filterSize;
